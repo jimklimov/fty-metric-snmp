@@ -1,0 +1,22 @@
+EXTRA_DIST += \
+	rules/*.cfg \
+	rules/*.rule
+
+check-local: $(abs_top_builddir)/rules
+
+$(abs_top_builddir)/rules: $(abs_top_srcdir)/rules
+	@if test "$@" != "$<" ; then \
+	    echo "  COPYDIR  rules"; \
+	    rm -rf "$@"; \
+	    cp -r "$<" "$@" ; \
+	 fi
+
+clean-local: clean-local-check
+.PHONY: clean-local-check
+clean-local-check:
+	@if test "$(abs_top_builddir)" != "$(abs_top_srcdir)" ; then \
+	    if test -d "$(abs_top_builddir)/rules" ; then \
+	        chmod -R u+w "$(abs_top_builddir)/rules" ; \
+	        rm -rf "$(abs_top_builddir)/rules" ; \
+	    fi; \
+	 fi
